@@ -1,28 +1,23 @@
 package com.study.springsecurity.config;
 
+import com.study.springsecurity.user.SecurityUser;
+import com.study.springsecurity.user.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+import java.util.List;
 
 @Configuration
 public class UserDetailServiceConfig {
 
     @Bean
     public UserDetailsService userDetailService() {
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-
-        UserDetails user = User.withUsername("마잡개")
-                .password("1234")
-                .authorities("read")
-                .build();
-        manager.createUser(user);
-
-        return manager;
+        User user = new User("마잡개", "1357", "test@test.com");
+        SecurityUser securityUser = new SecurityUser(user);
+        return new InMemoryUserDetailsService(List.of(securityUser));
     }
 
     @Bean
